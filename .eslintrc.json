@@ -89,7 +89,6 @@
         "no-useless-call": "error",
         "no-useless-computed-key": "error",
         "no-useless-concat": "error",
-        "no-useless-return": "error",
         "no-var": "error",
         "no-whitespace-before-property": "error",
         "object-curly-newline": [

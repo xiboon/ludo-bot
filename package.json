@@ -24,5 +24,14 @@
   "bugs": {
     "url": "https://github.com/"
   },
-  "homepage": ""
+  "homepage": "",
+  "dependencies": {
+    "@discordjs/builders": "^0.15.0",
+    "@sentry/node": "^7.4.1",
+    "@sentry/tracing": "^7.4.1",
+    "canvas": "^2.9.3",
+    "discord-api-types": "^0.36.0",
+    "dotenv": "^16.0.1",
+    "tiscord": "^1.4.4"
+  }
 }
