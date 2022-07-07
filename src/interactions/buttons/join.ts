@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { ButtonStyle } from 'discord-api-types/v10';
 import { ButtonInteraction, MessageAttachment } from 'tiscord';
 import { LudoClient } from '../../classes/Client';
+import { joinRow } from '../rows/joinRow';
 
 export async function run(client: LudoClient, interaction: ButtonInteraction) {
     const [, gameId, color] = interaction.customId.split('.');
@@ -18,7 +19,10 @@ export async function run(client: LudoClient, interaction: ButtonInteraction) {
         });
     }
     if (game.players.some(p => p.id === interaction.user.id))
-        return interaction.reply({ content: 'You are already in this game.', ephemeral: true });
+        return interaction.reply({
+            content: "This is your control meessage. Don't delete it, and wait for your turn.",
+            ephemeral: true
+        });
     const takenColors = game.players.map(p => p.color);
     if (takenColors.includes(parseInt(color) as 1 | 2 | 3 | 4))
         return interaction.reply({
@@ -35,28 +39,7 @@ export async function run(client: LudoClient, interaction: ButtonInteraction) {
     });
 
     client.games.set(parseInt(gameId), game);
-    const actionRow = new ActionRowBuilder().setComponents(
-        new ButtonBuilder()
-            .setEmoji({ name: '🟢' })
-            .setCustomId(`join.${gameId}.1`)
-            .setStyle(ButtonStyle.Secondary)
-            .setDisabled(takenColors.includes(1)),
-        new ButtonBuilder()
-            .setEmoji({ name: '🟡' })
-            .setCustomId(`join.${gameId}.2`)
-            .setStyle(ButtonStyle.Secondary)
-            .setDisabled(takenColors.includes(2)),
-        new ButtonBuilder()
-            .setEmoji({ name: '🔴' })
-            .setCustomId(`join.${gameId}.3`)
-            .setStyle(ButtonStyle.Secondary)
-            .setDisabled(takenColors.includes(3)),
-        new ButtonBuilder()
-            .setEmoji({ name: '🔵' })
-            .setCustomId(`join.${gameId}.4`)
-            .setStyle(ButtonStyle.Secondary)
-            .setDisabled(takenColors.includes(4))
-    );
+    const actionRow = await joinRow(takenColors, gameId);
     const startRow = new ActionRowBuilder().setComponents(
         new ButtonBuilder()
             .setLabel('Start')
@@ -64,7 +47,7 @@ export async function run(client: LudoClient, interaction: ButtonInteraction) {
             .setStyle(ButtonStyle.Success)
     );
     await interaction.reply({
-        content: 'you have joined the game.',
+        content: "This is your control meessage. Don't delete it, and wait for your turn.",
         // components: [actionRow],
         ephemeral: true
     });

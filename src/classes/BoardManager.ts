@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises';
 import { Game } from './Game';
-import { Canvas, createCanvas, loadImage, registerFont } from 'canvas';
+import { Canvas, createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas';
 import { join } from 'path';
 import { Positions } from '../types/Util';
 export class BoardManager {
@@ -12,9 +12,10 @@ export class BoardManager {
     };
     colors = ['58f287', 'f7de52', 'ed4245', '4187ed'];
     constructor() {
-        registerFont(join(__dirname, '../../assets/ABCGintoNormal-Black-Trial.woff2'), {
-            family: 'Ginto'
-        });
+        GlobalFonts.registerFromPath(
+            join(__dirname, '../../assets/ABCGintoNormal-Black-Trial.woff2'),
+            'Ginto'
+        );
     }
     async generate(game: Game) {
         const img = await readFile(`${__dirname}/../../assets/board.png`);
@@ -42,7 +43,7 @@ export class BoardManager {
                 );
             })
         );
-        return canvas.toBuffer();
+        return canvas.toBuffer('image/png');
     }
     // thanks d.js guide
     applyText(canvas: Canvas, text: string) {

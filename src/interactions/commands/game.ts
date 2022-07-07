@@ -9,7 +9,7 @@ export async function run(client: LudoClient, interaction: ChatInputCommandInter
     client.lastId = gameId;
     const game = new Game(gameId, interaction.user.id);
     client.games.set(gameId, game);
-    const actionRow = joinRow([], gameId.toString());
+    const actionRow = await joinRow([], gameId.toString());
     const startRow = new ActionRowBuilder().setComponents(
         new ButtonBuilder()
             .setLabel('Start')
