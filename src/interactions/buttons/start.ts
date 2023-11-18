@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { ButtonStyle } from 'discord-api-types/v10';
-import { ButtonInteraction, MessageAttachment } from 'tiscord';
+import { ButtonInteraction, AttachmentBuilder } from 'discord.js';
 import { LudoClient } from '../../classes/Client';
 import { joinRow } from '../rows/joinRow';
 
@@ -13,14 +13,17 @@ export async function run(client: LudoClient, interaction: ButtonInteraction) {
             ephemeral: true
         });
     const actionRow = await joinRow([1, 2, 3, 4], gameId);
-    const startRow = new ActionRowBuilder().setComponents(
+    const startRow = new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
             .setLabel('Resend control message')
             .setCustomId(`join.${gameId}`)
             .setStyle(ButtonStyle.Primary)
     );
-    await interaction.editOriginalMessage({
+    await interaction.message.edit({
         components: [actionRow, startRow],
-        attachments: [new MessageAttachment(await client.board.generate(game), 'board.png')]
+        attachments: [
+            // @ts-expect-error
+            new AttachmentBuilder(await client.board.generate(game), { name: 'board.png' }).toJSON()
+        ]
     });
 }

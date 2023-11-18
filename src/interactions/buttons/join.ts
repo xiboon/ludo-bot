@@ -1,6 +1,5 @@
-import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { ButtonStyle } from 'discord-api-types/v10';
-import { ButtonInteraction, MessageAttachment } from 'tiscord';
+import { ButtonInteraction, AttachmentBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
 import { LudoClient } from '../../classes/Client';
 import { joinRow } from '../rows/joinRow';
 
@@ -13,7 +12,7 @@ export async function run(client: LudoClient, interaction: ButtonInteraction) {
         if (!game.players.some(p => p.id === interaction.user.id))
             return interaction.reply({ content: 'You are not in this game.', ephemeral: true });
         await interaction.reply({
-            content: 'you have joined the game.',
+            content: "This is your control message. Don't delete it, and wait for your turn.",
             // components: [actionRow],
             ephemeral: true
         });
@@ -39,20 +38,21 @@ export async function run(client: LudoClient, interaction: ButtonInteraction) {
     });
 
     client.games.set(parseInt(gameId), game);
+    await interaction.reply({
+        content: "This is your control message. Don't delete it, and wait for your turn.",
+        ephemeral: true
+    });
+
     const actionRow = await joinRow(takenColors, gameId);
-    const startRow = new ActionRowBuilder().setComponents(
+    const startRow = new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
             .setLabel('Start')
             .setCustomId(`start.${gameId}`)
             .setStyle(ButtonStyle.Success)
     );
-    await interaction.reply({
-        content: "This is your control meessage. Don't delete it, and wait for your turn.",
-        // components: [actionRow],
-        ephemeral: true
-    });
+
     await interaction.message.edit({
-        attachments: [new MessageAttachment(await client.board.generate(game), 'board.png')],
+        files: [new AttachmentBuilder(await client.board.generate(game), { name: 'board.png' })],
         components: [actionRow, startRow]
     });
 }

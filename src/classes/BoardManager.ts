@@ -56,6 +56,7 @@ export class BoardManager {
 
         return context.font;
     }
+
     drawCoin(canvas: Canvas, color: string, position: number[], id: number) {
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = `#${color}`;

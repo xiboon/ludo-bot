@@ -24,7 +24,6 @@ export class Game {
         this.players.push(player);
         this.coins[player.id] = [];
         for (let i = 0; i < 4; i++) {
-            console.log(' Iam');
             this.coins[player.id].push(
                 // @ts-expect-error
                 { color: player.color, position: 0 - i, end: false, id: i + 1 }

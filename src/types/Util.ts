@@ -40,3 +40,9 @@ export const positionMap = [
     [220, 750],
     [170, 750]
 ];
+const grids = [
+    [6, 3],
+    [3, 6]
+];
+const middleSize = [194, 194];
+for (let i = 0; i <= 4; i++) {}

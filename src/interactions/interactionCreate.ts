@@ -1,9 +1,9 @@
-import { Interaction } from 'tiscord';
+import { Interaction } from 'discord.js';
 import { LudoClient } from '../classes/Client';
 
 export async function interactionCreate(client: LudoClient, interaction: Interaction) {
     if (interaction.isChatInputCommand()) {
-        const command = client.interactions.commands.get(interaction.name);
+        const command = client.interactions.commands.get(interaction.commandName);
         if (command) {
             await command.run(client, interaction);
         }

@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { ButtonStyle } from 'discord-api-types/v10';
 export async function joinRow(takenColors: number[], gameId: string) {
-    return new ActionRowBuilder().setComponents(
+    return new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
             .setEmoji({ name: '🟢' })
             .setCustomId(`join.${gameId}.1`)
